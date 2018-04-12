@@ -1,0 +1,23 @@
+{
+  "name": "amazon-cli-app",
+  "version": "1.0.0",
+  "description": "",
+  "main": "bamazonCustomer.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/breannanelson/amazon-cli-app.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/breannanelson/amazon-cli-app/issues"
+  },
+  "homepage": "https://github.com/breannanelson/amazon-cli-app#readme",
+  "dependencies": {
+    "inquirer": "^5.2.0",
+    "mysql": "^2.15.0"
+  }
+}
