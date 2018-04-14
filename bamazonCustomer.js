@@ -36,21 +36,23 @@ var qs2 = [
     },
 ];
 
+function candmPrompt() {
+    pmpt(qs1).then(function (r, e) {
+        if (e) throw e;
 
-pmpt(qs1).then(function (r, e) {
-    if (e) throw e;
 
+        switch (r.viewType) {
+            case "Customer View":
+                customerView();
 
-    switch (r.viewType) {
-        case "Customer View":
-            customerView();
+                break;
+            case "Manager View":
+                bamazonManager.manager(inq, mysql, pmpt, Table, connection);
+                break;
+        };
+    })
+}
 
-            break;
-        case "Manager View":
-            bamazonManager.manager(inq, mysql, pmpt, Table, connection);
-            break;
-    };
-})
 
 
 function customerView() {
@@ -104,6 +106,7 @@ function customerView() {
                 else {
                     console.log("Insufficient quantity!");
                 }
+                candmPrompt();
             })
 
         })
@@ -113,5 +116,7 @@ function customerView() {
 
 
 };
+
+candmPrompt();
 
 
