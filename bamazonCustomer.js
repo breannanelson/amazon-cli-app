@@ -1,7 +1,8 @@
-//Customer view
 var inq = require('inquirer');
 var mysql = require('mysql');
 var pmpt = inq.createPromptModule();
+var Table = require('cli-table');
+var bamazonManager = require('./bamazonManager.js');
 
 
 var connection = mysql.createConnection({
@@ -10,6 +11,7 @@ var connection = mysql.createConnection({
     password: 'root',
     database: 'bamazon_db'
 });
+
 
 
 var qs1 = [
@@ -38,39 +40,46 @@ var qs2 = [
 pmpt(qs1).then(function (r, e) {
     if (e) throw e;
 
-    console.log(r);
 
     switch (r.viewType) {
         case "Customer View":
-            printAllItems();
+            customerView();
 
             break;
         case "Manager View":
+            bamazonManager.manager(inq, mysql, pmpt, Table, connection);
             break;
-        default:
-            console.log("I'm sorry, we could not recognize your response.");
     };
 })
 
 
-function startConnect() {
-    connection.connect();
-}
+function customerView() {
+    var table = new Table({
+        chars: {
+            'top': '═', 'top-mid': '╤', 'top-left': '╔', 'top-right': '╗'
+            , 'bottom': '═', 'bottom-mid': '╧', 'bottom-left': '╚', 'bottom-right': '╝'
+            , 'left': '║', 'left-mid': '╟', 'mid': '─', 'mid-mid': '┼'
+            , 'right': '║', 'right-mid': '╢', 'middle': '│'
+        }
+    });
 
-function endConnect() {
-    connection.end();
-}
-
-function printAllItems() {
-
-    startConnect();
 
     connection.query('SELECT * FROM products', function (error, results, fields) {
         if (error) throw error;
 
+        table.push(
+            ['ID:', 'Product:', 'Price:']
+        );
         for (var key in results) {
-            console.log(results[key].item_id + " | " + results[key].product_name + " | " + results[key].price)
+
+            table.push(
+                [results[key].item_id, results[key].product_name, "$" + results[key].price]
+            );
+
+
+
         }
+        console.log(table.toString());
 
         pmpt(qs2).then(function (r, e) {
             if (e) throw e;
@@ -95,7 +104,6 @@ function printAllItems() {
                 else {
                     console.log("Insufficient quantity!");
                 }
-                endConnect();
             })
 
         })
